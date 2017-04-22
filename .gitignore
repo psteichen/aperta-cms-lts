@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+#django stuff
+manage.py
+
+#other stuff
+TODO
