@@ -4,7 +4,8 @@ from .core_settings import *
 
 ######################
 ## (LOCAL) SETTINGS ##
-######################
+##     DEFAULTS     ##
+####################
 
 SECRET_KEY = '4j$om7#%h7ahryh!lht(mlf!c*vm%5zcz4sf+5xc#ki)ij(v=&'
 DEBUG = True
@@ -185,10 +186,10 @@ TEMPLATE_CONTENT['events'] = EVENTS_TMPL_CONTENT
 EVENTS_ATTENDANCE_URL = ATTENDANCE_BASE_URL + 'events/'
 
 #finance
-#from finance.settings import *
-#TEMPLATE_CONTENT['finance'] = FINANCE_TMPL_CONTENT
+from finance.settings import *
+TEMPLATE_CONTENT['finance'] = FINANCE_TMPL_CONTENT
 
 #web
-#from web.settings import *
-#TEMPLATE_CONTENT['web'] = WEB_TMPL_CONTENT
+from web.settings import *
+TEMPLATE_CONTENT['web'] = WEB_TMPL_CONTENT
 

@@ -89,6 +89,7 @@ ENV/
 .ropeproject
 
 #django stuff
+settings.py
 
 #other stuff
 TODO

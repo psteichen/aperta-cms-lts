@@ -1,29 +1,36 @@
 {% extends "base.html" %}
-
-{% load extra_tags %}
+{% load bootstrap3 %}
 
 {% block content %}
-<center>
-<form role="form" class="form-horizontal" method="post" action="{% url 'login' %}">
-{% csrf_token %}
- <div class="panel panel-primary">
-  <div class="panel-heading">
-   <h2 class="panel-title">{{ auth.title }}</h2>
+<div class="jumbotron">
+ {% block errors %}
+  {% if error_message %}<p class="error">{{ error_message }}</p>{% endif %}
+ {% endblock %}
+
+ {% block form %}
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title text-center">{{ auth.title }}</h2>
+    </div>
+    <div class="panel-body">
+      <div class="col-xs-2"></div>
+      <div class="col-xs-8">
+       <form role="form" class="form-horizontal" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ form.management_form }}
+        {% bootstrap_form form %}
+        <div class="btn-toolbar">
+         <div class="btn-group">
+          <button class="btn btn-success" type="submit" value="{{ auth.submit }}">{{ auth.submit }}&nbsp;&nbsp;<i class="fa fa-sign-in"></i></button>
+         </div>
+        </div>
+       </form>  
+      </div>
+      <div class="col-xs-2"></div>
+    </div>
   </div>
-  <div class="panel-body">
-   {% for field in form %}
-     <div class="form-group row">
-       {% if field.errors %}<div class="col-xs-12">{{ field.errors }}</div>{% endif %}
-       <div class="col-xs-3"></div>
-       <div class="col-xs-3">{{ field.label_tag }}</div>
-       <div class="col-xs-3">{{ field|addclass:"form-control" }}</div>
-       <div class="col-xs-3"></div>
-     </div>
-   {% endfor %}
-   <button class="btn btn-danger" type="submit">{{ auth.submit }}</button>
-   <input type="hidden" name="next" value="{{ next }}" />
-  </div>
- </div>
-</form>
-</center>
+ {% endblock %}
+</div>
+
 {% endblock %}
+

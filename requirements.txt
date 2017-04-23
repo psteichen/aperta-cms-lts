@@ -1,6 +1,7 @@
 django>=1.11
 Pillow
-django-formtools
+django-formtools #1.11 detached formwizard and stuff
 django-tables2
-django-breadcrumbs
+#django-breadcrumbs #not working with 1.11
+django-headcrumbs
 django-bootstrap3
