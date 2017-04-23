@@ -25,12 +25,21 @@ SECRET_KEY = '4j$om7#%h7ahryh!lht(mlf!c*vm%5zcz4sf+5xc#ki)ij(v=&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'lts.cms.aperta.lu', ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+# dependencies
+    'formtools',
+# project apps
+    'members.apps.MembersConfig',
+    'locations.apps.LocationsConfig',
+    'meetings.apps.MeetingsConfig',
+    'events.apps.EventsConfig',
+    'attendance.apps.AttendanceConfig',
+# core apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,13 +63,19 @@ ROOT_URLCONF = 'cms_lts.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [        	
+		os.path.join(BASE_DIR, 'templates'),
+	],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+		 'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -103,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Luxembourg'
 
 USE_I18N = True
 
@@ -118,3 +133,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
