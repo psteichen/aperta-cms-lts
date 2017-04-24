@@ -6,6 +6,7 @@ ACTIONS = {
     {
       'label'		: u'Nouveau Membre',
       'icon'     	: 'plus',
+      'grade'     	: 'danger',
       'url'           	: '/members/add/',
       'has_perms'	: 'cms.BOARD',
     },

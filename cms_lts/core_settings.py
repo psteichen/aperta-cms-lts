@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'headcrumbs',
   # project apps
     'members.apps.MembersConfig',
+    'upload.apps.UploadConfig',
     'locations.apps.LocationsConfig',
     'meetings.apps.MeetingsConfig',
     'events.apps.EventsConfig',
@@ -54,8 +55,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'headcrumbs.middleware.CrumbsMiddleware',
 #    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware', #needed by breadcrumbs
+]
+MIDDLEWARE_CLASSES = [
+    'headcrumbs.middleware.CrumbsMiddleware',
 ]
 
 ROOT_URLCONF = 'cms_lts.urls'

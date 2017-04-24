@@ -39,11 +39,19 @@
      {% include "nav.html" %}
     {% endblock %}
 
-    <!-- breadcrumbs -->
-    {% for breadcrumb in request.breadcrumbs %}
-      {% if forloop.first %}<ol class="breadcrumb">{% endif %}
-      {% if forloop.last %}<li class="active"><a class="active" href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li></ol>{% else %}<li><a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>{% endif %}
-    {% endfor %}
+    <!-- headcrumbs -->
+    {% if crumbs %}
+     <ol class="breadcrumb">
+     {% for crumb in crumbs %}
+      {% if forloop.first %}<li><a href="/">Home</a></li>{% endif %}
+      {% if forloop.last %}
+       <li class="active"><a class="active" href="{{ crumb.url }}">{{ crumb.text }}</a></li>
+      {% else %}
+       <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>
+      {% endif %}
+     {% endfor %}
+    </ol>
+    {% endif %}
 
     {% if meta.badge %}
       <div class="pull-left">

@@ -6,7 +6,7 @@
     <div class="pull-right">
       {% for a in actions %}
        {% if a.has_perms in perms or not a.has_perms %}
-        {% if a.url %}<a class="btn btn-danger" href="{{ a.url }}" role="button">{% if a.icon %}<i class="fa fa-{{ a.icon }}"></i>{% endif %}&nbsp;&nbsp;{{ a.label }}&nbsp;</a>{% endif %}
+        {% if a.url %}<a class="btn {% if a.grade %}btn-{{a.grade}}{% endif %}" href="{{ a.url }}" role="button">{% if a.icon %}<i class="fa fa-{{ a.icon }}"></i>{% endif %}&nbsp;&nbsp;{{ a.label }}&nbsp;</a>{% endif %}
        {% endif %}
       {% endfor %}
     </div>
@@ -15,7 +15,8 @@
   <h2>{{ title }}</h2>
   <p>{{ desc|safe }}</p>
   <hr/>
-  {% render_table table "table_with_page_numbers.html" %}
+{#  {% render_table table "table_with_page_numbers.html" %}  old template contains deprecated tags #}
+  {% render_table table %}
 {% endblock %}
 
 
