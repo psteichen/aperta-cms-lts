@@ -3,15 +3,19 @@
 #
 from datetime import date, timedelta, datetime
 
-from django.shortcuts import render
+from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.utils import timezone
 
+from formtools.wizard.views import SessionWizardView
+
 from django_tables2  import RequestConfig
 
-from cms.functions import notify_by_email, show_form, visualiseDateTime
+from headcrumbs.decorators import crumb
+from headcrumbs.util import name_from_pk
+
+from cms_lts.functions import notify_by_email, show_form, visualiseDateTime
 
 from events.models import Event
 from members.models import Member
@@ -32,11 +36,8 @@ from .tables  import MeetingTable, MgmtMeetingTable, MeetingMixin, MeetingListin
 # list #
 ########
 @permission_required('cms.MEMBER',raise_exception=True)
+@crumb(u'Réunions statutaires')
 def list(r):
-  r.breadcrumbs( ( 
-			('home','/'),
-                   	('meetings','/meetings/'),
-               ) )
 
   table = MeetingTable(Meeting.objects.all().order_by('-num'))
   if r.user.has_perm('cms.BOARD'):
@@ -44,7 +45,7 @@ def list(r):
 
   RequestConfig(r, paginate={"per_page": 75}).configure(table)
 
-  return render(r, settings.TEMPLATE_CONTENT['meetings']['template'], {
+  return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['template'], {
                    'title': settings.TEMPLATE_CONTENT['meetings']['title'],
                    'desc': settings.TEMPLATE_CONTENT['meetings']['desc'],
                    'actions': settings.TEMPLATE_CONTENT['meetings']['actions'],
@@ -55,12 +56,8 @@ def list(r):
 # add #
 #######
 @permission_required('cms.BOARD',raise_exception=True)
+@crumb(u'Réunions statutaires')
 def add(r):
-  r.breadcrumbs( ( 	
-			('home','/'),
-                   	('meetings','/meetings/'),
-                   	('add meeting','/meetings/add/'),
-               ) )
 
   if r.POST:
     e_template =  settings.TEMPLATE_CONTENT['meetings']['add']['done']['email']['template']
@@ -108,21 +105,21 @@ def add(r):
           # error in email -> show error messages
           if not email_error['ok']:
             I.save()
-            return render(r, settings.TEMPLATE_CONTENT['meetings']['add']['done']['template'], {
+            return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['add']['done']['template'], {
                 		'title': settings.TEMPLATE_CONTENT['meetings']['add']['done']['title'], 
                 		'error_message': settings.TEMPLATE_CONTENT['error']['email'] + ' ; '.join([e for e in email_error['who']]),
 			 })
 
       # all fine -> done
       I.save()
-      return render(r, settings.TEMPLATE_CONTENT['meetings']['add']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['add']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['add']['done']['title'], 
                 'message': settings.TEMPLATE_CONTENT['meetings']['add']['done']['message'] % { 'email': done_message, 'attachement': I.attachement, 'list': ' ; '.join([gen_member_fullname(m) for m in get_active_members()]), },
                 })
 
     # form not valid -> error
     else:
-      return render(r, settings.TEMPLATE_CONTENT['meetings']['add']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['add']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['add']['done']['title'], 
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'] + ' ; '.join([e for e in mf.errors]),
                 })
@@ -135,7 +132,7 @@ def add(r):
       form = MeetingForm(initial={ 'title': str(next_num) + '. réunion statutaire', 'num': next_num, })
     except Meeting.DoesNotExist:
       pass
-    return render(r, settings.TEMPLATE_CONTENT['meetings']['add']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['add']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['add']['title'],
                 'desc': settings.TEMPLATE_CONTENT['meetings']['add']['desc'],
                 'submit': settings.TEMPLATE_CONTENT['meetings']['add']['submit'],
@@ -147,11 +144,6 @@ def add(r):
 ########
 @permission_required('cms.BOARD',raise_exception=True)
 def send(r, meeting_num):
-  r.breadcrumbs( ( 
-			('home','/'),
-                   	('meetings','/meetings/'),
-                   	('send meeting invitations','/meetings/send/'),
-               ) )
 
   e_template =  settings.TEMPLATE_CONTENT['meetings']['send']['done']['email']['template']
 
@@ -181,7 +173,7 @@ def send(r, meeting_num):
 
   # error in email -> show error messages
   if not email_error['ok']:
-    return render(r, settings.TEMPLATE_CONTENT['meetings']['send']['done']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['send']['done']['template'], {
                 	'title': title, 
        	        	'error_message': settings.TEMPLATE_CONTENT['error']['email'] + ' ; '.join([e for e in email_error['who']]),
                   })
@@ -190,7 +182,7 @@ def send(r, meeting_num):
   else:
     I.sent = datetime.now()
     I.save()
-    return render(r, settings.TEMPLATE_CONTENT['meetings']['send']['done']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['send']['done']['template'], {
 	                'title': title, 
         	        'message': settings.TEMPLATE_CONTENT['meetings']['send']['done']['message'] + ' ; '.join([gen_member_fullname(m) for m in get_active_members()]),
                   })
@@ -207,7 +199,7 @@ def invite(r, meeting_num, member_id):
     if member_id:
       M = Member.objects.get(pk=member_id)
   else:
-    return render(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['invite']['done']['title'], 
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'],
                 })
@@ -252,7 +244,7 @@ def invite(r, meeting_num, member_id):
 
       # error in email -> show error messages
       if not email_error['ok']:
-        return render(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
+        return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
               'title': settings.TEMPLATE_CONTENT['meetings']['invite']['done']['title'], 
               'error_message': settings.TEMPLATE_CONTENT['error']['email'] + ' ; '.join([e for e in email_error['who']]),
               })
@@ -260,19 +252,19 @@ def invite(r, meeting_num, member_id):
       # all fine -> done
       I.sent = timezone.now()
       I.save()
-      return render(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['invite']['done']['title'], 
                 'message': settings.TEMPLATE_CONTENT['meetings']['invite']['done']['message'] % { 'email': invitation_message, 'attachement': I.attachement, 'list': ' ; '.join([gen_member_fullname(i) for i in invitees]), },
                 })
 
     # form not valid -> error
     else:
-      return render(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['invite']['done']['template'], {
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'] + ' ; '.join([str(e) for e in ifs.errors]),
                 })
   # no post yet -> empty form
   else:
-    return render(r, settings.TEMPLATE_CONTENT['meetings']['invite']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['invite']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['invite']['title'] + unicode(Mt),
                 'desc': settings.TEMPLATE_CONTENT['meetings']['invite']['desc'],
                 'submit': settings.TEMPLATE_CONTENT['meetings']['invite']['submit'],
@@ -284,17 +276,12 @@ def invite(r, meeting_num, member_id):
 ############
 @login_required
 def details(r, meeting_num):
-  r.breadcrumbs( ( 
-			('home','/'),
-                   	('meetings','/meetings/'),
-                   	('details for meeting n. '+meeting_num,'/meetings/list/'+meeting_num+'/'),
-               ) )
 
   meeting = Meeting.objects.get(num=meeting_num)
   title = settings.TEMPLATE_CONTENT['meetings']['details']['title'] % { 'meeting' : meeting.title, }
   message = gen_meeting_overview(settings.TEMPLATE_CONTENT['meetings']['details']['overview']['template'],meeting)
 
-  return render(r, settings.TEMPLATE_CONTENT['meetings']['details']['template'], {
+  return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['details']['template'], {
                    'title': title,
                    'message': message,
                 })
@@ -304,17 +291,12 @@ def details(r, meeting_num):
 ###########
 @login_required
 def listing(r, meeting_num):
-  r.breadcrumbs( (
-                        ('home','/'),
-                        ('meetings','/meetings/'),
-                        ('listing for meeting n. '+meeting_num,'/meetings/listing/'+meeting_num+'/'),
-               ) )
 
   meeting = Meeting.objects.get(num=meeting_num)
   title = settings.TEMPLATE_CONTENT['meetings']['listing']['title'] % { 'meeting' : meeting.title, }
   message = gen_meeting_listing(settings.TEMPLATE_CONTENT['meetings']['listing']['content']['template'],meeting)
 
-  return render(r, settings.TEMPLATE_CONTENT['meetings']['listing']['template'], {
+  return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['listing']['template'], {
                    'title': title,
                    'message': message,
                 })
@@ -335,12 +317,6 @@ class ModifyMeetingWizard(SessionWizardView):
 
   def get_context_data(self, form, **kwargs):
     context = super(ModifyMeetingWizard, self).get_context_data(form=form, **kwargs)
-
-    #add breadcrumbs to context
-    self.request.breadcrumbs( ( ('home','/'),
-                                ('meetings','/meetings/'),
-                                ('modify a meeting','/meetings/modify/'),
-                            ) )
 
     if self.steps.current != None:
       title = u'réunion'
@@ -374,10 +350,6 @@ class ModifyMeetingWizard(SessionWizardView):
     return form
 
   def done(self, form_list, form_dict, **kwargs):
-    self.request.breadcrumbs( ( ('home','/'),
-                                ('meetings','/meetings/'),
-                                ('modify a meeting','/meetings/modify/'),
-                            ) )
 
     template = settings.TEMPLATE_CONTENT['meetings']['modify']['done']['template']
 
@@ -418,7 +390,7 @@ class ModifyMeetingWizard(SessionWizardView):
 
     title = settings.TEMPLATE_CONTENT['meetings']['modify']['done']['title'] % M
 
-    return render(self.request, template, {
+    return TemplateResponse(self.request, template, {
                         'title': title,
                  })
 
@@ -427,10 +399,6 @@ class ModifyMeetingWizard(SessionWizardView):
 ##########
 @permission_required('cms.BOARD',raise_exception=True)
 def report(r, meeting_num):
-  r.breadcrumbs( ( 	
-			('home','/'),
-                   	('meetings','/meetings/'),
-               ) )
 
   Mt = Meeting.objects.get(num=meeting_num)
 
@@ -462,26 +430,26 @@ def report(r, meeting_num):
 
         # error in email -> show error messages
         if not email_error['ok']:
-          return render(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
+          return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['report']['done']['title'], 
                 'error_message': settings.TEMPLATE_CONTENT['error']['email'] + ' ; '.join([e for e in email_error['who']]),
                 })
         else:
           # done -> with sending
-          return render(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
+          return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
 				'title': settings.TEMPLATE_CONTENT['meetings']['report']['done']['title_send'], 
                 		'message': settings.TEMPLATE_CONTENT['meetings']['report']['done']['message_send'] + ' ; '.join([gen_member_fullname(m) for m in get_active_members()]),
                 })
       else:
         # done -> no sending
-        return render(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
+        return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
 			'title': settings.TEMPLATE_CONTENT['meetings']['report']['done']['title'], 
                 	'message': settings.TEMPLATE_CONTENT['meetings']['report']['done']['message'],
                 })
 
     # form not valid -> error
     else:
-      return render(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['report']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['meetings']['report']['done']['title'], 
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'] + ' ; '.join([e for e in mrf.errors]),
                 })
@@ -489,7 +457,7 @@ def report(r, meeting_num):
   else:
     form = MeetingReportForm(initial={ 'num': Mt.num, 'title': Mt.title, 'when': visualiseDateTime(Mt.when), })
     title = settings.TEMPLATE_CONTENT['meetings']['report']['title'].format(unicode(Mt.num))
-    return render(r, settings.TEMPLATE_CONTENT['meetings']['report']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['meetings']['report']['template'], {
                 'title': title,
                 'desc': settings.TEMPLATE_CONTENT['meetings']['report']['desc'],
                 'submit': settings.TEMPLATE_CONTENT['meetings']['report']['submit'],

@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib.auth.decorators import permission_required
 
 from attendance.forms import ModifyAttendanceForm
@@ -22,7 +22,7 @@ modify_meeting_wizard = ModifyMeetingWizard.as_view(modify_meeting_forms, condit
 #wrapper with specific permissions
 modify_meeting_wrapper = permission_required('cms.BOARD',raise_exception=True)(modify_meeting_wizard)
 
-urlpatterns = patterns('',
+urlpatterns = [
   url(r'^$', list, name='list'),
   url(r'^list/(?P<meeting_num>.+?)/$', details, name='details'),
   url(r'^listing/(?P<meeting_num>.+?)/$', listing, name='listing'),
@@ -33,4 +33,4 @@ urlpatterns = patterns('',
   url(r'^send/(?P<meeting_num>.+?)/$', send, name='send'),
   url(r'^modify/(?P<meeting_num>.+?)/$', modify_meeting_wrapper, name='modify'),
   url(r'^report/(?P<meeting_num>.+?)/$', report, name='report'),
-)
+]
