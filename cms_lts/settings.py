@@ -39,7 +39,7 @@ TEMPLATE_CONTENT = {
     'logo' : {
       'title'		: 'FIFTY-ONE<br/><strong><em>APERTA</em></strong>',
       'img'		: 'https://aperta.lu/pics/logo-51-aperta_picto.png',
-      'url'             : 'https://aperta.lu/',
+      'url'             : '/',
     },
     'description'       : '',
     'keywords'          : '',

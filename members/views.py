@@ -46,12 +46,8 @@ def list(request):
 # add #
 #######
 @permission_required('cms.BOARD')
+@crumb(u'add a member', parent=list)
 def add(r):
-#  r.breadcrumbs( ( 
-#			('home','/'),
-#                   	('members','/members/'),
-#                   	('add a member','/members/add/'),
-#                ) )
 
   if r.POST:
     mf = MemberForm(r.POST)
@@ -111,12 +107,6 @@ class ModifyMemberWizard(SessionWizardView):
   def get_context_data(self, form, **kwargs):
     context = super(ModifyMemberWizard, self).get_context_data(form=form, **kwargs)
 
-    #add breadcrumbs to context
-#    self.request.breadcrumbs( ( 
-#				('home','/'),
-#                   		('members','/members/'),
-#                            ) )
-
     if self.steps.current != None:
       context.update({'first': settings.TEMPLATE_CONTENT['members']['modify']['first']})
       context.update({'prev': settings.TEMPLATE_CONTENT['members']['modify']['prev']})
@@ -151,11 +141,8 @@ class ModifyMemberWizard(SessionWizardView):
 
     return form
 
+  @crumb(u'Members')
   def done(self, fl, form_dict, **kwargs):
-#    self.request.breadcrumbs( ( 
-#				('home','/'),
-#         	                ('members','/members/'),
-#                            ) )
 
     template = settings.TEMPLATE_CONTENT['members']['modify']['done']['template']
 
@@ -189,12 +176,8 @@ class ModifyMemberWizard(SessionWizardView):
 # role_add #
 ############
 @permission_required('cms.BOARD')
+@crumb(u'add a role', parent=list)
 def role_add(r):
-#  r.breadcrumbs( ( 
-#			('home','/'),
-#                   	('members','/members/'),
-#                   	('add a role','/members/role/add/'),
-#                ) )
 
   if r.POST:
     rf = RoleForm(r.POST)
@@ -230,11 +213,6 @@ def role_add(r):
 @login_required
 @crumb(name_from_pk(User), parent=list)
 def profile(r, username):
-#  r.breadcrumbs( ( 
-#			('home','/'),
-#                   	('members','/members/'),
-#                   	('user profile','/members/profile/'+username),
-#               ) )
 
   member 	= Member.objects.get(user=r.user)
   title 	= settings.TEMPLATE_CONTENT['members']['profile']['title'] % { 'name' : gen_member_fullname(member), }
@@ -254,12 +232,8 @@ def profile(r, username):
 # modify profile #
 ##################
 @login_required
+@crumb(name_from_pk(User), parent=list)
 def mod_profile(r, username):
-#  r.breadcrumbs( ( 
-#			('home','/'),
-#                   	('members','/members/'),
-#                   	('user profile','/members/profile/'+username),
-#               ) )
 
   M = Member.objects.get(user=r.user)
 

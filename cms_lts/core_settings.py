@@ -55,10 +55,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'headcrumbs.middleware.CrumbsMiddleware',
 #    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware', #needed by breadcrumbs
 ]
 MIDDLEWARE_CLASSES = [
-    'headcrumbs.middleware.CrumbsMiddleware',
+#    'headcrumbs.middleware.CrumbsMiddleware',
 ]
 
 ROOT_URLCONF = 'cms_lts.urls'
