@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'formtools',
     'django_tables2',
-    'headcrumbs',
+#    'headcrumbs',
   # project apps
     'members.apps.MembersConfig',
     'upload.apps.UploadConfig',
@@ -57,9 +57,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'headcrumbs.middleware.CrumbsMiddleware',
 #    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware', #needed by breadcrumbs
-]
-MIDDLEWARE_CLASSES = [
-#    'headcrumbs.middleware.CrumbsMiddleware',
 ]
 
 ROOT_URLCONF = 'cms_lts.urls'

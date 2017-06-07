@@ -38,21 +38,6 @@
     {% block nav %}
      {% include "nav.html" %}
     {% endblock %}
-
-    <!-- headcrumbs -->
-    {% if crumbs %}
-     <ol class="breadcrumb">
-     {% for crumb in crumbs %}
-      {% if forloop.first %}<li><a href="/">Home</a></li>{% endif %}
-      {% if forloop.last %}
-       <li class="active"><a class="active" href="{{ crumb.url }}">{{ crumb.text }}</a></li>
-      {% else %}
-       <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>
-      {% endif %}
-     {% endfor %}
-    </ol>
-    {% endif %}
-
     {% if meta.badge %}
       <div class="pull-left">
         <span class="btn btn-danger disabled">{{ meta.badge }}</span>
@@ -62,11 +47,27 @@
       </div>
     {% endif %}
 
-<!-- start jumbotron -->
+  <!-- start jumbotron -->
     <div class="jumbotron">
+
+     <!-- headcrumbs -->
+     {% if crumbs %}
+      <ol class="breadcrumb">
+       <li><a href="/">Home</a></li>
+       {% for crumb in crumbs %}
+        {% if forloop.last %}
+         <li class="active"><a class="active" href="{{ crumb.url }}">{{ crumb.text }}</a></li>
+        {% else %}
+         <li><a href="{{ crumb.url }}">{{ crumb.text }}</a></li>
+        {% endif %}
+       {% endfor %}
+      </ol>
+     {% endif %}
+
+     <!-- content -->
      {% block content %}{% endblock %}
     </div>
-<!--  end jumbotron -->
+  <!--  end jumbotron -->
 
     <div class="footer">
      <p class="text-muted pull-right">&copy; {{ meta.copyright }} 2014</p>

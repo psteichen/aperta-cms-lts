@@ -27,7 +27,7 @@ from .tables  import MemberTable, MgmtMemberTable
 # list #
 #########
 @permission_required('cms.MEMBER')
-@crumb(u'Membres')
+@crumb(name_from_pk(Member))
 def list(request):
 
   table = MemberTable(Member.objects.all().order_by('status', 'last_name'),request,username=request.user.username)
