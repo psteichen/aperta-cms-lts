@@ -3,7 +3,7 @@
 from django.db.models import Model, EmailField, DateField, IntegerField, CharField, ForeignKey, ImageField
 from django.contrib.auth.models import User
 
-from cms_lts.functions import rmf
+from cms.functions import rmf
 
 
 def rename_photo(i, f):

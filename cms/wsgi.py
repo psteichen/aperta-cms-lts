@@ -1,5 +1,5 @@
 """
-WSGI config for cms_lts project.
+WSGI config for cms project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -16,6 +16,6 @@ sys.path.append('/var/www/aperta.lu/django/cms-lts')
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cms_lts.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cms.settings")
 
 application = get_wsgi_application()

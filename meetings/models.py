@@ -2,7 +2,7 @@
 
 from django.db.models import Model, CharField, DateField, ForeignKey, TimeField, DateTimeField, IntegerField, FileField, EmailField
 
-from cms_lts.functions import rmf
+from cms.functions import rmf
 
 from members.models import Member
 from locations.models import Location

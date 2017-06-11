@@ -5,7 +5,7 @@ from os import path
 from django.conf import settings
 from django.template.loader import render_to_string
 
-from cms_lts.functions import visualiseDateTime
+from cms.functions import visualiseDateTime
 
 from attendance.models import Meeting_Attendance
 from members.models import Member

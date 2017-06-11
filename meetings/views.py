@@ -15,7 +15,7 @@ from django_tables2  import RequestConfig
 from headcrumbs.decorators import crumb
 from headcrumbs.util import name_from_pk
 
-from cms_lts.functions import notify_by_email, show_form, visualiseDateTime
+from cms.functions import notify_by_email, show_form, visualiseDateTime
 
 from events.models import Event
 from members.models import Member

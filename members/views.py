@@ -12,7 +12,7 @@ from django_tables2  import RequestConfig
 from headcrumbs.decorators import crumb
 from headcrumbs.util import name_from_pk
 
-from cms_lts.functions import show_form
+from cms.functions import show_form
 
 from meetings.models import Meeting
 from events.models import Event
