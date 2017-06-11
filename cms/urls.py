@@ -20,7 +20,7 @@ urlpatterns = [
   url(r'^chgpwd/$', password_change, {'template_name': 'chgpwd.html', 'post_change_redirect': '/chgpwd-done/'}, name='chgpwd'),
   url(r'^chgpwd-done/$', password_change_done, {'template_name': 'done.html'}, name='chgpwd-done'),
 
-#  url(r'^attendance/', include('attendance.urls')),
+  url(r'^attendance/', include('attendance.urls')),
 #  url(r'^locations/', include('locations.urls')),
 
   url(r'^meetings/', include('meetings.urls')),
