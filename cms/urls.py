@@ -21,7 +21,7 @@ urlpatterns = [
   url(r'^chgpwd-done/$', password_change_done, {'template_name': 'done.html'}, name='chgpwd-done'),
 
   url(r'^attendance/', include('attendance.urls')),
-#  url(r'^locations/', include('locations.urls')),
+  url(r'^locations/', include('locations.urls')),
 
   url(r'^meetings/', include('meetings.urls')),
   url(r'^members/', include('members.urls')),
