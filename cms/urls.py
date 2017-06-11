@@ -26,7 +26,7 @@ urlpatterns = [
   url(r'^meetings/', include('meetings.urls')),
   url(r'^members/', include('members.urls')),
   url(r'^upload/', include('upload.urls')),
-#  url(r'^finance/', include('finance.urls')),
+  url(r'^finance/', include('finance.urls')),
 
   url(r'^events/', include('events.urls')),
 #  url(r'^web/', include('web.urls')),

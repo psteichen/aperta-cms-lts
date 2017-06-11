@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'meetings.apps.MeetingsConfig',
     'events.apps.EventsConfig',
     'attendance.apps.AttendanceConfig',
+    'finance.apps.FinanceConfig',
   # core apps
     'django.contrib.admin',
     'django.contrib.auth',
