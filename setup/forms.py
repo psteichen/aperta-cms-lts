@@ -15,14 +15,14 @@ class SetupForm(Form):
   )
 
   name			= CharField()
-  logo			= ImagefFeld()
+  logo			= ImageField()
   admin_email		= EmailField()
 
-  default_sender 	= CharField(widget=Textarea(),initial='FIFTY-ONE Aperta'),
-  default_email 	= EmailField(),
+  default_sender 	= CharField(widget=Textarea(),initial='FIFTY-ONE Aperta')
+  default_email 	= EmailField()
   default_footer 	= CharField(widget=Textarea(),initial='''Amicalement,
 Le comité APERTA
-'''),
+''')
 
   apps			= MultipleChoiceField(widget=CheckboxSelectMultiple(),choices=APPS)
 

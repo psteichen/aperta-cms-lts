@@ -1,4 +1,4 @@
-#
+
 # coding=utf-8
 #
 from datetime import date, timedelta, datetime
@@ -26,7 +26,7 @@ from .forms import SetupForm
 # init #
 ########
 @staff_member_required
-@crumb(u'Setup',parent=cms.views.index)
+@crumb(u'Setup')
 def init(r):
 
   form_template	= settings.TEMPLATE_CONTENT['setup']['init']['template']
@@ -41,6 +41,13 @@ def init(r):
     sf = SetupForm(r.POST,r.FILES)
     if sf.is_valid():
       # all fine -> create (local) settings file
+      name		= sf.cleaned_data['name']
+      logo		= sf.cleaned_data['logo']
+      admin_email	= sf.cleaned_data['admin_email']
+      default_sender 	= sf.cleaned_data['default_sender']
+      default_email 	= sf.cleaned_data['default_email']
+      default_footer 	= sf.cleaned_data['default_footer']
+      apps		= sf.cleaned_data['apps']
       # HERE
 
     # form not valid -> error

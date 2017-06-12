@@ -32,5 +32,6 @@ urlpatterns = [
 #  url(r'^web/', include('web.urls')),
 #  url(r'^selling/', include('selling.urls')),
  
+  url(r'^setup/', include('setup.urls')),
   url(r'^admin/', include(admin.site.urls)),
 ]

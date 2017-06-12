@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 #    'headcrumbs',
   # project apps
     'members.apps.MembersConfig',
+    'setup.apps.SetupConfig',
     'upload.apps.UploadConfig',
     'locations.apps.LocationsConfig',
     'meetings.apps.MeetingsConfig',
