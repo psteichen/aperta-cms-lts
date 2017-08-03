@@ -23,7 +23,6 @@ class Migration(migrations.Migration):
                 ('year', models.CharField(max_length=4)),
                 ('num', models.IntegerField()),
                 ('date', models.DateField(verbose_name='état du')),
-                ('scan', models.FileField(upload_to=finance.models.rename_scan)),
             ],
         ),
         migrations.CreateModel(

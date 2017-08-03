@@ -16,10 +16,6 @@ from .forms import ImportData
 ##########
 @permission_required('cms.BOARD')
 def upload(r,ty):
-  r.breadcrumbs( ( 	
-			('home','/'),
-                   	('import data','/upload/'+ty+'/'),
-               ) )
 
   template  	= settings.TEMPLATE_CONTENT['upload'][ty]['template']
   title  	= settings.TEMPLATE_CONTENT['upload'][ty]['title']
@@ -40,7 +36,7 @@ def upload(r,ty):
       if ok == False:
         # issue with import -> error
         return render(r, done_template, {
-                               'error_message'  : settings.TEMPLATE_CONTENT['error']['gen'] + ' ' + str(ok),
+                               'error_message'  : settings.TEMPLATE_CONTENT['error']['import'] + ' ' + str(ok),
                     })
       else:
         # all fine -> done
