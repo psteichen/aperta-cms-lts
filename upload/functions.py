@@ -39,13 +39,13 @@ def import_data(ty,data):
       try:
         Model = Member.objects.get(first_name=unicode(l['PRENOM']),last_name=unicode(l['NOM']),email=unicode(l['EMAIL']))
       except Member.DoesNotExist:
-	Model = Member (
-			first_name    	= unicode(l['PRENOM']),
-			last_name	= unicode(l['NOM']),
-			address		= unicode(l['ADRESSE']),
-			phone		= unicode(l['TEL']),
-			mobile		= unicode(l['MOBILE']),
-			email		= unicode(l['EMAIL'])
+        Model = Member(
+		first_name    = unicode(l['PRENOM']),
+		last_name	= unicode(l['NOM']),
+		address	= unicode(l['ADRESSE']),
+		phone		= unicode(l['TEL']),
+		mobile	= unicode(l['MOBILE']),
+		email		= unicode(l['EMAIL'])
 	)
         # create user
         U = User.objects.create_user(gen_username(Model.first_name,Model.last_name), Model.email, make_password(gen_random_password()))
@@ -53,7 +53,7 @@ def import_data(ty,data):
         U.last_name = Model.last_name
         U.save()
         U.user_permissions.add(Permission.objects.get(codename='MEMBER'))
-	Model.user = U
+        Model.user = U
         Model.save()
         nb+=1
 
@@ -62,27 +62,26 @@ def import_data(ty,data):
       if l['TYPE'] == '0': #meeting
         debug('upload',u"it's a meeting")
         try:
-	  Model = Meeting.objects.get(when=unicode(l['DATE']),title=unicode(l['TITRE']))
+          Model = Meeting.objects.get(when=unicode(l['DATE']),title=unicode(l['TITRE']))
         except Meeting.DoesNotExist:
-	  Model = Meeting (
-			title  		= unicode(l['TITRE']),
-			when		= unicode(l['DATE']),
-			time		= unicode(l['HEURE']),
-			deadline	= deadline,
-		)
-
+          Model = Meeting(
+		title  		= unicode(l['TITRE']),
+		when		= unicode(l['DATE']),
+		time		= unicode(l['HEURE']),
+		deadline	= deadline,
+	  )
 
       if l['TYPE'] == '1': #event
         debug('upload',u"it's an event")
         try:
-	  Model = Event.objects.get(when=unicode(l['DATE']),title=unicode(l['TITRE']))
+          Model = Event.objects.get(when=unicode(l['DATE']),title=unicode(l['TITRE']))
         except Event.DoesNotExist:
-	  Model = Event (
-			title  		= unicode(l['TITRE']),
-			when		= unicode(l['DATE']),
-			time		= unicode(l['HEURE']),
-			deadline	= deadline,
-		)
+          Model = Event (
+		title  		= unicode(l['TITRE']),
+		when		= unicode(l['DATE']),
+		time		= unicode(l['HEURE']),
+		deadline	= deadline,
+	  )
 
       # check/create location
       location = None
