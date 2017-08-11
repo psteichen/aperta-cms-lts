@@ -56,7 +56,7 @@ def list(r):
 # add #
 #######
 @permission_required('cms.BOARD',raise_exception=True)
-@crumb(u'add a meeting',parent=list)
+@crumb(u'Ajoute une réunion',parent=list)
 def add(r):
 
   if r.POST:
@@ -111,7 +111,7 @@ def add(r):
 # send #
 ########
 @permission_required('cms.BOARD',raise_exception=True)
-@crumb(u'send {meeting} invitations'.format(meeting=name_from_pk(Meeting)),parent=list)
+@crumb(u'Envoie des invitations de la réunion : {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
 def send(r, meeting_num):
 
   e_template =  settings.TEMPLATE_CONTENT['meetings']['send']['done']['email']['template']
@@ -164,7 +164,7 @@ def send(r, meeting_num):
 # invite #
 ##########
 #@permission_required('cms.MEMBER',raise_exception=True)
-@crumb(u'invite guest for {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
+@crumb(u'Inviter un externe à la réunion : {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
 def invite(r, meeting_num, member_id):
 
   Mt = M = None
@@ -249,7 +249,7 @@ def invite(r, meeting_num, member_id):
 # details #
 ############
 @login_required
-@crumb(u'details for {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
+@crumb(u'Détails de la réunion : {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
 def details(r, meeting_num):
 
   meeting = Meeting.objects.get(num=meeting_num)
@@ -265,7 +265,7 @@ def details(r, meeting_num):
 # listing #
 ###########
 @login_required
-@crumb(u'listing for {meeting}'.format(meeting=name_from_pk(Meeting)),parent=details)
+@crumb(u'Listing pour la réunion : {meeting}'.format(meeting=name_from_pk(Meeting)),parent=details)
 def listing(r, meeting_num):
 
   meeting = Meeting.objects.get(num=meeting_num)
@@ -281,7 +281,7 @@ def listing(r, meeting_num):
 # modify #
 ##########
 @permission_required('cms.BOARD',raise_exception=True)
-@crumb(u'modify {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
+@crumb(u'Modifier la réunion : {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
 def modify(r,meeting_num):
 
   Mt = Meeting.objects.get(pk=meeting_num)
@@ -330,7 +330,7 @@ def modify(r,meeting_num):
 # report #
 ##########
 @permission_required('cms.BOARD',raise_exception=True)
-@crumb(u'report for {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
+@crumb(u'Rapport de réunion : {meeting}'.format(meeting=name_from_pk(Meeting)),parent=list)
 def report(r, meeting_num):
 
   Mt = Meeting.objects.get(num=meeting_num)

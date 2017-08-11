@@ -27,7 +27,7 @@ from .tables  import MemberTable, MgmtMemberTable, RoleTable
 # list #
 #########
 @permission_required('cms.MEMBER')
-@crumb(u'members')
+@crumb(u'Membres')
 def list(request):
 
   table = MemberTable(Member.objects.all().order_by('status', 'last_name'),request,username=request.user.username)
@@ -46,7 +46,7 @@ def list(request):
 # add #
 #######
 @permission_required('cms.BOARD')
-@crumb(u'add a member', parent=list)
+@crumb(u'Ajouter un membre', parent=list)
 def add(r):
 
   if r.POST:
@@ -90,7 +90,7 @@ def add(r):
 # modify #
 ##########
 @permission_required('cms.BOARD')
-@crumb(u'modify {member}'.format(member=name_from_pk(Member)),parent=list)
+@crumb(u'Modifier le membre [{member}]'.format(member=name_from_pk(Member)),parent=list)
 def modify(r,mem_id):
 
   M = Member.objects.get(pk=mem_id)
@@ -126,6 +126,7 @@ def modify(r,mem_id):
 # roles #
 #########
 @permission_required('cms.BOARD')
+@crumb(u'Rôles')
 def roles(request):
 
   table = RoleTable(Role.objects.all().order_by('year', 'type'))
@@ -140,7 +141,7 @@ def roles(request):
 # roles  modify #
 #################
 @permission_required('cms.BOARD')
-@crumb(u'modify {role}'.format(role=name_from_pk(Role)), parent=list)
+@crumb(u'Modifier le rôle [{role}]'.format(role=name_from_pk(Role)), parent=roles)
 def r_modify(r,role_id):
 
   R = Role.objects.get(pk=role_id)
@@ -177,6 +178,7 @@ def r_modify(r,role_id):
 # roles  add #
 ##############
 @permission_required('cms.BOARD')
+@crumb(u'Ajouter un rôle', parent=roles)
 def r_add(r):
 
   if r.POST:
@@ -209,6 +211,7 @@ def r_add(r):
 # roles  type #
 #################
 @permission_required('cms.BOARD')
+@crumb(u'Créer un type de rôle', parent=roles)
 def r_type(r):
 
   if r.POST:
@@ -242,7 +245,7 @@ def r_type(r):
 # profile #
 ###########
 @login_required
-@crumb(name_from_pk(User), parent=list)
+@crumb(u'Profile utilisateur: {user}'.format(user=name_from_pk(User)), parent=cms.views.home)
 def profile(r, username):
 
   member 	= Member.objects.get(user=r.user)
