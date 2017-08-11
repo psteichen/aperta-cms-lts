@@ -1,6 +1,11 @@
+#
+# coding=utf-8
+#
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.template.response import TemplateResponse
+from django.shortcuts import redirect
 from django.contrib.auth.hashers import make_password
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required, permission_required
@@ -100,13 +105,13 @@ def modify(r,mem_id):
       M = mf.save()
 
       # all fine -> done
-      return render(r, settings.TEMPLATE_CONTENT['members']['modify']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['modify']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['modify']['done']['title'].format(unicode(M)),
                 })
 
     # form not valid -> error
     else:
-      return render(r, settings.TEMPLATE_CONTENT['members']['modify']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['modify']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['modify']['done']['title'],
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'] + ' ; '.join([e for e in mf.errors]),
                 })
@@ -115,7 +120,7 @@ def modify(r,mem_id):
     form = MemberForm()
     form.initial = gen_member_initial(M)
     form.instance = M
-    return render(r, settings.TEMPLATE_CONTENT['members']['modify']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['modify']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['modify']['title'],
                 'desc': settings.TEMPLATE_CONTENT['members']['modify']['desc'],
                 'submit': settings.TEMPLATE_CONTENT['members']['modify']['submit'],
@@ -126,12 +131,12 @@ def modify(r,mem_id):
 # roles #
 #########
 @permission_required('cms.BOARD')
-@crumb(u'Rôles')
+@crumb(u"Rôles")
 def roles(request):
 
   table = RoleTable(Role.objects.all().order_by('year', 'type'))
   RequestConfig(request, paginate={"per_page": 75}).configure(table)
-  return render(request, settings.TEMPLATE_CONTENT['members']['roles']['template'], {
+  return TemplateResponse(request, settings.TEMPLATE_CONTENT['members']['roles']['template'], {
                         'title': settings.TEMPLATE_CONTENT['members']['roles']['title'],
                         'actions': settings.TEMPLATE_CONTENT['members']['roles']['actions'],
                         'table': table,
@@ -187,13 +192,13 @@ def r_add(r):
       R = rf.save()
 
       # all fine -> done
-      return render(r, settings.TEMPLATE_CONTENT['members']['roles']['add']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['roles']['add']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['roles']['add']['done']['title'],
                 })
 
     # form not valid -> error
     else:
-      return render(r, settings.TEMPLATE_CONTENT['members']['roles']['add']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['roles']['add']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['roles']['add']['done']['title'],
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'] + ' ; '.join([e for e in rf.errors]),
                 })
@@ -201,7 +206,7 @@ def r_add(r):
   # no post yet -> empty form
   else:
     form = RoleForm(initial = { 'year'        : getSaison(), })
-    return render(r, settings.TEMPLATE_CONTENT['members']['roles']['add']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['roles']['add']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['roles']['add']['title'],
                 'desc': settings.TEMPLATE_CONTENT['members']['roles']['add']['desc'],
                 'submit': settings.TEMPLATE_CONTENT['members']['roles']['add']['submit'],
@@ -220,13 +225,13 @@ def r_type(r):
       Rt = rtf.save()
 
       # all fine -> done
-      return render(r, settings.TEMPLATE_CONTENT['members']['roles']['type']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['roles']['type']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['roles']['type']['done']['title'],
                 })
 
     # form not valid -> error
     else:
-      return render(r, settings.TEMPLATE_CONTENT['members']['roles']['type']['done']['template'], {
+      return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['roles']['type']['done']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['roles']['type']['done']['title'],
                 'error_message': settings.TEMPLATE_CONTENT['error']['gen'] + ' ; '.join([e for e in rtf.errors]),
                 })
@@ -234,7 +239,7 @@ def r_type(r):
   # no post yet -> empty form
   else:
     form = RoleTypeForm()
-    return render(r, settings.TEMPLATE_CONTENT['members']['roles']['type']['template'], {
+    return TemplateResponse(r, settings.TEMPLATE_CONTENT['members']['roles']['type']['template'], {
                 'title': settings.TEMPLATE_CONTENT['members']['roles']['type']['title'],
                 'desc': settings.TEMPLATE_CONTENT['members']['roles']['type']['desc'],
                 'submit': settings.TEMPLATE_CONTENT['members']['roles']['type']['submit'],
@@ -245,10 +250,15 @@ def r_type(r):
 # profile #
 ###########
 @login_required
-@crumb(u'Profile utilisateur: {user}'.format(user=name_from_pk(User)), parent=cms.views.home)
+@crumb(u'Profile utilisateur: {user}'.format(user=name_from_pk(User)))
 def profile(r, username):
 
-  member 	= Member.objects.get(user=r.user)
+  try:
+    member 	= Member.objects.get(user=r.user)
+  except Member.DoesNotExist:
+    # non-member user, probably an admin -> redirect to admin console
+    return redirect('/admin/')
+    
   title 	= settings.TEMPLATE_CONTENT['members']['profile']['title'] % { 'name' : gen_member_fullname(member), }
   actions 	= settings.TEMPLATE_CONTENT['members']['profile']['actions']
   for a in actions:

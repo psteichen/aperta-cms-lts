@@ -8,6 +8,9 @@ from formtools.wizard.views import SessionWizardView
 
 from django_tables2  import RequestConfig
 
+from headcrumbs.decorators import crumb
+from headcrumbs.util import name_from_pk
+
 from .functions import import_data
 from .forms import ImportData
 
@@ -15,6 +18,7 @@ from .forms import ImportData
 # upload #
 ##########
 @permission_required('cms.BOARD')
+@crumb(u'Import')
 def upload(r,ty):
 
   template  	= settings.TEMPLATE_CONTENT['upload'][ty]['template']

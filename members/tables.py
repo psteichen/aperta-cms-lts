@@ -180,4 +180,5 @@ class RoleTable(Table):
   class Meta:
     model = Role
     fields = ( 'year', 'type', 'member', )
+    attrs = {"class": "table table-striped"}
 
